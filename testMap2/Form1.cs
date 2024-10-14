@@ -25,8 +25,8 @@ namespace testMap2
             InitializeComponent();
 
             // Initialize map
-            gMapControl1.MapProvider = GMapProviders.GoogleMap;
-            gMapControl1.Position = new PointLatLng(44.914650, 26.036069);  // Default position
+            gMapControl1.MapProvider = GMapProviders.OpenStreetMap;
+            gMapControl1.Position = new PointLatLng(44.91462925640748, 26.036031246185303);  // Default position
             gMapControl1.MinZoom = 5;
             gMapControl1.MaxZoom = 100;
             gMapControl1.Zoom = 12;
