@@ -107,18 +107,18 @@ namespace testMap2
                     gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
                     markersOverlay.Routes.Add(gMapRoute);
                 }
-                    else
-                    {
+                else
+                {
                     var geometry = route["geometry"].ToString();
                     var routePoints = DecodePolyline(geometry);
                     GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
 
-                    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 1);
+                    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
                     markersOverlay.Routes.Add(gMapRoute);
                 }
-                    //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-                                 
-                
+                //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+
+
             }
 
             // Refresh the map to show new markers and routes
