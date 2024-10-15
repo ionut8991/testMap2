@@ -103,7 +103,7 @@ namespace testMap2
                     {
                     var geometry = route["geometry"].ToString();
                     var routePoints = DecodePolyline(geometry);
-                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
+                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
                     gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
                     markersOverlay.Routes.Add(gMapRoute);
                 }
@@ -111,8 +111,7 @@ namespace testMap2
                 {
                     var geometry = route["geometry"].ToString();
                     var routePoints = DecodePolyline(geometry);
-                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
-
+                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
                     gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
                     markersOverlay.Routes.Add(gMapRoute);
                 }
