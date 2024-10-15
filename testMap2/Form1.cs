@@ -93,28 +93,31 @@ namespace testMap2
                     markersOverlay.Markers.Add(marker);
 
                 }
-
-                foreach (var vehicle in route["vehicle"])
-                {
-                    //textBox1.AppendText(route.ToString());
-                    
+             
                     // Decode the polyline geometry
-                    var geometry = route["geometry"].ToString();
-                    var routePoints = DecodePolyline(geometry);
+                    
 
                     // Plot the route on the map
-                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
+                    
                     if (route["vehicle"].ToString() == "1")
                     {
-                        gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
-                    }
-                    else
-                    {
-                        gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
-                    }
-                    //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+                    var geometry = route["geometry"].ToString();
+                    var routePoints = DecodePolyline(geometry);
+                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
+                    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
                     markersOverlay.Routes.Add(gMapRoute);
                 }
+                    else
+                    {
+                    var geometry = route["geometry"].ToString();
+                    var routePoints = DecodePolyline(geometry);
+                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
+
+                    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 1);
+                    markersOverlay.Routes.Add(gMapRoute);
+                }
+                    //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+                                 
                 
             }
 
