@@ -80,8 +80,9 @@ namespace testMap2
 
             foreach (var route in routes)
             {
+                textBox1.AppendText(route.ToString());
                 var steps = route["steps"];
-
+                
                 foreach (var step in steps)
                 {
                     var location = step["location"];
