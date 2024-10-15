@@ -243,6 +243,8 @@ namespace testMap2
             string jsonResponse = await GetOptimizationResponse(); // Assume this function gets the response from the API
             PlotRouteOnMap(jsonResponse);
             MessageBox.Show("Optimization response plotted on the map! + " + jsonResponse);
+            System.IO.File.AppendAllText("log.txt", jsonResponse);
+
         }
 
 
