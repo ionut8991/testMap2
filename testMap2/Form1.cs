@@ -80,30 +80,31 @@ namespace testMap2
 
             foreach (var route in routes)
             {
+                var steps = route["steps"];
+                //textBox1.AppendText(steps.ToString());
+                foreach (var step in steps)
+                {
+                    var location = step["location"];
+                    double lat = (double)location[1];
+                    double lng = (double)location[0];
+
+                    // Add a marker for each step
+                    var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
+                    markersOverlay.Markers.Add(marker);
+
+                }
+
                 foreach (var vehicle in route["vehicle"])
                 {
-                    textBox1.AppendText(route.ToString());
-                    var steps = route["steps"];
-                    //textBox1.AppendText(steps.ToString());
-                    foreach (var step in steps)
-                    {
-                        var location = step["location"];
-                        double lat = (double)location[1];
-                        double lng = (double)location[0];
-
-                        // Add a marker for each step
-                        var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
-                        markersOverlay.Markers.Add(marker);
-
-                    }
-
+                    //textBox1.AppendText(route.ToString());
+                    
                     // Decode the polyline geometry
                     var geometry = route["geometry"].ToString();
                     var routePoints = DecodePolyline(geometry);
 
                     // Plot the route on the map
                     GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
-                    if (vehicle["id"].ToString() == "1")
+                    if (route["vehicle"].ToString() == "1")
                     {
                         gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
                     }
