@@ -13,6 +13,7 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsPresentation;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Drawing;
 
 namespace testMap2
 {
@@ -40,60 +41,7 @@ namespace testMap2
             CallApiAndPlotResponse();
         }
 
-        //public void PlotRouteOnMap(string jsonResponse)
-        //{
-        //    // Parse the response using Newtonsoft.Json
-        //    var response = JObject.Parse(jsonResponse);
-
-        //    // Extract routes from the response
-        //    var routes = response["routes"];
-
-        //    foreach (var route in routes)
-        //    {
-        //        var steps = route["steps"];
-        //        foreach (var step in steps)
-        //        {
-        //            var location = step["location"];
-        //            double lat = (double)location[1];
-        //            double lng = (double)location[0];
-
-        //            // Add a marker for each step
-        //            var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
-        //            markersOverlay.Markers.Add(marker);
-
-        //        }
-
-        //        var markerStart = new GMarkerGoogle(new PointLatLng(26.02270603179932, 44.94115439843291), GMarkerGoogleType.green_pushpin);
-        //        markersOverlay.Markers.Add(markerStart);
-        //            // Decode the polyline geometry
-
-
-        //        // Plot the route on the map
-
-        //            if (route["vehicle"].ToString() == "1")
-        //            {
-        //            var geometry = route["geometry"].ToString();
-        //            var routePoints = DecodePolyline(geometry);
-        //            GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
-        //            gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
-        //            markersOverlay.Routes.Add(gMapRoute);
-        //        }
-        //        else
-        //        {
-        //            var geometry = route["geometry"].ToString();
-        //            var routePoints = DecodePolyline(geometry);
-        //            GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
-        //            gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-        //            markersOverlay.Routes.Add(gMapRoute);
-        //        }
-        //        //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-
-
-        //    }
-
-        //    // Refresh the map to show new markers and routes
-        //    gMapControl1.Refresh();
-        //}
+        
         public void PlotRouteOnMap(string jsonResponse)
         {
             // Parse the response using Newtonsoft.Json
@@ -127,7 +75,7 @@ namespace testMap2
                 foreach (var step in steps)
                 {
                     // Skip steps of type "start"
-                    if (step["type"]?.ToString() == "start")
+                    if (step["type"]?.ToString() == "start" || step["type"]?.ToString() == "end")
                     {
                         continue; // Skip this iteration for "start" type steps
                     }
@@ -143,8 +91,17 @@ namespace testMap2
                     double distanceFromLastPoint = previousDistance > 0 ? currentDistance - previousDistance : currentDistance;
 
                     // Add a marker for each valid step
+                    Bitmap markerImage = CreateMarkerImage(step["id"].ToString());
+                    //var marker = new GMarkerGoogle(new PointLatLng(lat, lng), markerImage);
                     var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
                     markersOverlay.Markers.Add(marker);
+
+                    // Set tooltip text
+                    marker.ToolTipText = $"ID: {step["id"]} - {distanceFromLastPoint} m";
+                    marker.ToolTip.Fill = Brushes.LightYellow; // Customize tooltip background
+                    marker.ToolTip.Stroke = Pens.Black; // Tooltip border
+                    marker.ToolTip.Foreground = Brushes.Black; // Tooltip text color
+                    
 
                     // Log each step's details
                     MessageBox.Show($"Step: Location ({lat}, {lng}) - Distance from last point: {distanceFromLastPoint} meters");
@@ -179,6 +136,18 @@ namespace testMap2
 
 
 
+        private Bitmap CreateMarkerImage(string text)
+        {
+            Bitmap bmp = new Bitmap(40, 40); // Adjust size as needed
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                // Draw a red dot
+                g.FillEllipse(Brushes.Red, 0, 0, 20, 20);
+                // Draw the text below the marker
+                g.DrawString(text, new Font("Arial", 8), Brushes.Black, new PointF(0, 22)); // Adjust text position if needed
+            }
+            return bmp;
+        }
 
 
         public List<PointLatLng> DecodePolyline(string encodedPolyline)
@@ -224,6 +193,7 @@ namespace testMap2
                 points.Add(point);
             }
 
+            
             return points;
         }
 
