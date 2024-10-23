@@ -25,8 +25,8 @@ namespace testMap2
             InitializeComponent();
 
             // Initialize map
-            gMapControl1.MapProvider = GMapProviders.OpenStreetMap;
-            gMapControl1.Position = new PointLatLng(44.91462925640748, 26.036031246185303);  // Default position
+            gMapControl1.MapProvider = GMapProviders.GoogleMap;
+            gMapControl1.Position = new PointLatLng(44.91442221794393, 26.036540865898136);  // Default position
             gMapControl1.MinZoom = 5;
             gMapControl1.MaxZoom = 100;
             gMapControl1.Zoom = 12;
@@ -40,89 +40,145 @@ namespace testMap2
             CallApiAndPlotResponse();
         }
 
+        //public void PlotRouteOnMap(string jsonResponse)
+        //{
+        //    // Parse the response using Newtonsoft.Json
+        //    var response = JObject.Parse(jsonResponse);
+
+        //    // Extract routes from the response
+        //    var routes = response["routes"];
+
+        //    foreach (var route in routes)
+        //    {
+        //        var steps = route["steps"];
+        //        foreach (var step in steps)
+        //        {
+        //            var location = step["location"];
+        //            double lat = (double)location[1];
+        //            double lng = (double)location[0];
+
+        //            // Add a marker for each step
+        //            var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
+        //            markersOverlay.Markers.Add(marker);
+
+        //        }
+
+        //        var markerStart = new GMarkerGoogle(new PointLatLng(26.02270603179932, 44.94115439843291), GMarkerGoogleType.green_pushpin);
+        //        markersOverlay.Markers.Add(markerStart);
+        //            // Decode the polyline geometry
+
+
+        //        // Plot the route on the map
+
+        //            if (route["vehicle"].ToString() == "1")
+        //            {
+        //            var geometry = route["geometry"].ToString();
+        //            var routePoints = DecodePolyline(geometry);
+        //            GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
+        //            gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
+        //            markersOverlay.Routes.Add(gMapRoute);
+        //        }
+        //        else
+        //        {
+        //            var geometry = route["geometry"].ToString();
+        //            var routePoints = DecodePolyline(geometry);
+        //            GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
+        //            gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+        //            markersOverlay.Routes.Add(gMapRoute);
+        //        }
+        //        //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+
+
+        //    }
+
+        //    // Refresh the map to show new markers and routes
+        //    gMapControl1.Refresh();
+        //}
         public void PlotRouteOnMap(string jsonResponse)
         {
             // Parse the response using Newtonsoft.Json
             var response = JObject.Parse(jsonResponse);
 
             // Extract routes from the response
-            //var routes = response["routes"];
-
-            //foreach (var route in routes)
-            //{
-            //    var geometry = route["geometry"].ToString();
-            //    var steps = route["steps"];
-
-            //    List<PointLatLng> routePoints = new List<PointLatLng>();
-
-            //    foreach (var step in steps)
-            //    {
-            //        var location = step["location"];
-            //        double lat = (double)location[1];
-            //        double lng = (double)location[0];
-
-            //        // Add a marker for each step
-            //        var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
-            //        markersOverlay.Markers.Add(marker);
-
-            //        // Add point to the route
-            //        routePoints.Add(new PointLatLng(lat, lng));
-            //    }
-
-            //    // Create a route
-            //    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["VehicleId"]}");
-            //    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-            //    markersOverlay.Routes.Add(gMapRoute);
-            //}
-
-            // Extract routes from the response
             var routes = response["routes"];
+
+            if (routes == null || !routes.HasValues)
+            {
+                MessageBox.Show("No routes found in the response.");
+                return; // Early exit if no routes
+            }
 
             foreach (var route in routes)
             {
+                var vehicleId = route["vehicle"]?.ToString() ?? "Unknown"; // Use null-conditional operator
+                //var summary = response["summary"];
+                var totalDistance = (double)route["distance"]; // Total distance of the route
+                MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters");
+
                 var steps = route["steps"];
-                //textBox1.AppendText(steps.ToString());
+                double previousDistance = 0; // Initialize variable to store the previous step's distance
+
+                if (steps == null || !steps.HasValues)
+                {
+                    MessageBox.Show($"No steps found for vehicle {vehicleId}.");
+                    continue; // Skip to the next route if no steps are present
+                }
+
                 foreach (var step in steps)
                 {
-                    var location = step["location"];
-                    double lat = (double)location[1];
-                    double lng = (double)location[0];
+                    // Skip steps of type "start"
+                    if (step["type"]?.ToString() == "start")
+                    {
+                        continue; // Skip this iteration for "start" type steps
+                    }
 
-                    // Add a marker for each step
+                    var location = step["location"];
+                    double lat = (double)location[1]; // Latitude
+                    double lng = (double)location[0]; // Longitude
+
+                    // Current step's distance
+                    double currentDistance = (double)step["distance"]; // Distance for this step
+
+                    // Calculate distance from previous point (if applicable)
+                    double distanceFromLastPoint = previousDistance > 0 ? currentDistance - previousDistance : currentDistance;
+
+                    // Add a marker for each valid step
                     var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
                     markersOverlay.Markers.Add(marker);
 
-                }
-             
-                    // Decode the polyline geometry
-                    
+                    // Log each step's details
+                    MessageBox.Show($"Step: Location ({lat}, {lng}) - Distance from last point: {distanceFromLastPoint} meters");
 
-                    // Plot the route on the map
-                    
-                    if (route["vehicle"].ToString() == "1")
-                    {
-                    var geometry = route["geometry"].ToString();
+                    // Update previous distance for the next iteration
+                    previousDistance = currentDistance;
+                }
+
+                // Decode the polyline geometry
+                var geometry = route["geometry"]?.ToString();
+                if (!string.IsNullOrEmpty(geometry))
+                {
                     var routePoints = DecodePolyline(geometry);
-                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
-                    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
+                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {vehicleId}");
+
+                    // Set the route color based on vehicle ID
+                    gMapRoute.Stroke = vehicleId == "1"
+                        ? new System.Drawing.Pen(System.Drawing.Color.Red, 3)
+                        : new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+
                     markersOverlay.Routes.Add(gMapRoute);
                 }
                 else
                 {
-                    var geometry = route["geometry"].ToString();
-                    var routePoints = DecodePolyline(geometry);
-                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {route["vehicle"]}");
-                    gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-                    markersOverlay.Routes.Add(gMapRoute);
+                    MessageBox.Show($"No geometry data found for vehicle {vehicleId}.");
                 }
-                //gMapRoute.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-
-
             }
 
             // Refresh the map to show new markers and routes
             gMapControl1.Refresh();
         }
+
+
+
 
 
         public List<PointLatLng> DecodePolyline(string encodedPolyline)
@@ -194,17 +250,17 @@ namespace testMap2
                 {
                     jobs = new object[]
     {
-        new { id = 1, service = 300, delivery = new[] { 1 }, location = new[] { 26.02270603179932, 44.94115439843291 }, skills = new[] { 1 }, time_windows = new[] { new[] { 32400, 36000 } } },
+        new { id = 1, service = 300, delivery = new[] { 1 }, location = new[] { 26.02270603179932, 44.94115439843291 }, skills = new[] { 1 } },
         new { id = 2, service = 300, delivery = new[] { 1 }, location = new[] { 26.001538038253788, 44.953539235786934 }, skills = new[] { 1 } },
         new { id = 3, service = 300, delivery = new[] { 1 }, location = new[] { 26.011649966239933, 44.951739765636106 }, skills = new[] { 2 } },
-        new { id = 4, service = 300, delivery = new[] { 1 }, location = new[] { 26.011649966239933, 44.951739765636106 }, skills = new[] { 2 } },
+        new { id = 4, service = 300, delivery = new[] { 1 }, location = new[] { 26.008629798889164, 44.940470914531225  }, skills = new[] { 2 } },
         new { id = 5, service = 300, delivery = new[] { 1 }, location = new[] { 26.032007932662967, 44.93134942283986 }, skills = new[] { 14 } },
         new { id = 6, service = 300, delivery = new[] { 1 }, location = new[] { 26.034196615219116, 44.91737197079612 }, skills = new[] { 14 } }
     },
                     vehicles = new[]
     {
-        new { id = 1, profile = "driving-car", start = new[] { 26.02270603179932, 44.94115439843291 }, end = new[] { 26.02270603179932, 44.94115439843291 }, capacity = new[] { 4 }, skills = new[] { 1, 14 }, time_window = new[] { 28800, 43200 } },
-        new { id = 2, profile = "driving-car", start = new[] { 26.02270603179932, 44.94115439843291 }, end = new[] { 26.02270603179932, 44.94115439843291 }, capacity = new[] { 4 }, skills = new[] { 2, 14 }, time_window = new[] { 28800, 43200 } }
+        new { id = 1, profile = "driving-car", start = new[] { 26.036540865898136, 44.91442221794393 }, end = new[] { 26.036540865898136, 44.91442221794393 }, capacity = new[] { 4 }, skills = new[] { 1, 14 }, time_window = new[] { 28800, 43200 } },
+        new { id = 2, profile = "driving-car", start = new[] { 26.036540865898136, 44.91442221794393 }, end = new[] { 26.036540865898136, 44.91442221794393 }, capacity = new[] { 4 }, skills = new[] { 2, 14 }, time_window = new[] { 28800, 43200 } }
     },
                     options = new
                     {
@@ -212,7 +268,7 @@ namespace testMap2
                     }
                 };
 
-
+                
                 // Create StringContent with the JSON payload and proper headers
                 var content = new StringContent(JsonConvert.SerializeObject(jsonContent), Encoding.UTF8, "application/json");
                 
@@ -247,6 +303,9 @@ namespace testMap2
 
         }
 
+        private void gMapControl1_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }
