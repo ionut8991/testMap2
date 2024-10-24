@@ -30,6 +30,7 @@
         {
             this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.vehicleTreeView = new System.Windows.Forms.TreeView();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,11 +70,19 @@
             this.panel1.Size = new System.Drawing.Size(1008, 429);
             this.panel1.TabIndex = 1;
             // 
+            // vehicleTreeView
+            // 
+            this.vehicleTreeView.Location = new System.Drawing.Point(12, 447);
+            this.vehicleTreeView.Name = "vehicleTreeView";
+            this.vehicleTreeView.Size = new System.Drawing.Size(622, 126);
+            this.vehicleTreeView.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1032, 585);
+            this.Controls.Add(this.vehicleTreeView);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -86,6 +95,7 @@
 
         private GMap.NET.WindowsForms.GMapControl gMapControl1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TreeView vehicleTreeView;
     }
 }
 

@@ -56,19 +56,36 @@ namespace testMap2
                 return; // Early exit if no routes
             }
 
+            vehicleTreeView.Nodes.Clear();
+
+            var vehicleRoutes = new Dictionary<string, TreeNode>();
+
+
+
             foreach (var route in routes)
             {
                 var vehicleId = route["vehicle"]?.ToString() ?? "Unknown"; // Use null-conditional operator
                 //var summary = response["summary"];
                 var totalDistance = (double)route["distance"]; // Total distance of the route
-                MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters");
+
+                var vehicleNode = new TreeNode();
+
+                if (!vehicleRoutes.ContainsKey(vehicleId))
+                {
+                    vehicleNode = new TreeNode($"Vehicle {vehicleId} (Total Distance: {totalDistance} m)");
+                    vehicleRoutes[vehicleId] = vehicleNode;
+                    vehicleTreeView.Nodes.Add(vehicleNode); // Add vehicle to the tree
+                }
+
+               // MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters");
 
                 var steps = route["steps"];
                 double previousDistance = 0; // Initialize variable to store the previous step's distance
 
                 if (steps == null || !steps.HasValues)
                 {
-                    MessageBox.Show($"No steps found for vehicle {vehicleId}.");
+                    var noStepsNode = new TreeNode($"No steps found for vehicle {vehicleId}.");
+                    vehicleNode.Nodes.Add(noStepsNode);
                     continue; // Skip to the next route if no steps are present
                 }
 
@@ -101,11 +118,14 @@ namespace testMap2
                     marker.ToolTip.Fill = Brushes.LightYellow; // Customize tooltip background
                     marker.ToolTip.Stroke = Pens.Black; // Tooltip border
                     marker.ToolTip.Foreground = Brushes.Black; // Tooltip text color
-                    
+
 
                     // Log each step's details
-                    MessageBox.Show($"Step: Location ({lat}, {lng}) - Distance from last point: {distanceFromLastPoint} meters");
+                    //MessageBox.Show($"Step: Location ({lat}, {lng}) - Distance from last point: {distanceFromLastPoint} meters");
+                    var stepNode = new TreeNode($"Step ID: {step["id"]}, Location: ({lat}, {lng}), Distance: {distanceFromLastPoint} m");
 
+                    // Add step as a child of the vehicle node
+                    vehicleNode.Nodes.Add(stepNode);
                     // Update previous distance for the next iteration
                     previousDistance = currentDistance;
                 }
