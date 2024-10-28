@@ -158,6 +158,7 @@ namespace testMap2
 
             // Refresh the map to show new markers and routes
             gMapControl1.Refresh();
+            gMapControl1.ReloadMap();
         }
 
 
@@ -251,7 +252,7 @@ namespace testMap2
 //            }
 //        };
 
-        private int nextJobId = 7;
+        
 
         public static async Task<string> GetOptimizationResponse()
         {

@@ -35,13 +35,35 @@ namespace testMap2
                 j_Skills = string.Join(",", Skills)
             };
 
-            db.Jobs.Add(job);
-            db.SaveChanges();
-
+            try
+            {
+                db.Jobs.Add(job);
+                db.SaveChanges();
+            }
+            catch
+            (Exception ex)
+            {
+                MessageBox.Show("Error adding delivery: " + ex.Message);
+                return;
+            }
             MessageBox.Show("Delivery added successfully!");
 
             this.DialogResult = DialogResult.OK; // Set OK to confirm addition
             this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            using (var mapForm = new MapForm())
+            {
+                if (mapForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Retrieve the selected coordinates from the MapForm
+                    var selectedPoint = mapForm.SelectedPoint;
+                    txtLatitude.Text = selectedPoint.Lat.ToString();
+                    txtLongitude.Text = selectedPoint.Lng.ToString();
+                }
+            }
         }
     }
 }
