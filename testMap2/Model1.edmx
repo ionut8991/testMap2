@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MonitFlotaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Jobs">
+          <Key>
+            <PropertyRef Name="j_Id" />
+          </Key>
+          <Property Name="j_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="j_Service" Type="int" Nullable="false" />
+          <Property Name="j_Delivery" Type="nvarchar" MaxLength="100" />
+          <Property Name="j_Location" Type="nvarchar" MaxLength="100" />
+          <Property Name="j_Skills" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Vehicles">
+          <Key>
+            <PropertyRef Name="vh_Id" />
+          </Key>
+          <Property Name="vh_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vh_Profile" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="vh_Start" Type="nvarchar" MaxLength="100" />
+          <Property Name="vh_End" Type="nvarchar" MaxLength="100" />
+          <Property Name="vh_Capacity" Type="nvarchar" MaxLength="100" />
+          <Property Name="vh_Skills" Type="nvarchar" MaxLength="100" />
+          <Property Name="vh_TimeWindow" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityContainer Name="MonitFlotaModelStoreContainer">
+          <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehicles" EntityType="Self.Vehicles" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MonitFlotaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="j_Id" />
+          </Key>
+          <Property Name="j_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="j_Service" Type="Int32" Nullable="false" />
+          <Property Name="j_Delivery" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="j_Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="j_Skills" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="vh_Id" />
+          </Key>
+          <Property Name="vh_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vh_Profile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="vh_Start" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="vh_End" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="vh_Capacity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="vh_Skills" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="vh_TimeWindow" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="MonitFlotaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Jobs" EntityType="Self.Job" />
+          <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MonitFlotaModelStoreContainer" CdmEntityContainer="MonitFlotaEntities">
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="MonitFlotaModel.Job">
+              <MappingFragment StoreEntitySet="Jobs">
+                <ScalarProperty Name="j_Id" ColumnName="j_Id" />
+                <ScalarProperty Name="j_Service" ColumnName="j_Service" />
+                <ScalarProperty Name="j_Delivery" ColumnName="j_Delivery" />
+                <ScalarProperty Name="j_Location" ColumnName="j_Location" />
+                <ScalarProperty Name="j_Skills" ColumnName="j_Skills" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehicles">
+            <EntityTypeMapping TypeName="MonitFlotaModel.Vehicle">
+              <MappingFragment StoreEntitySet="Vehicles">
+                <ScalarProperty Name="vh_Id" ColumnName="vh_Id" />
+                <ScalarProperty Name="vh_Profile" ColumnName="vh_Profile" />
+                <ScalarProperty Name="vh_Start" ColumnName="vh_Start" />
+                <ScalarProperty Name="vh_End" ColumnName="vh_End" />
+                <ScalarProperty Name="vh_Capacity" ColumnName="vh_Capacity" />
+                <ScalarProperty Name="vh_Skills" ColumnName="vh_Skills" />
+                <ScalarProperty Name="vh_TimeWindow" ColumnName="vh_TimeWindow" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -14,6 +14,7 @@ using GMap.NET.WindowsPresentation;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Drawing;
+using System.Linq;
 
 namespace testMap2
 {
@@ -223,8 +224,34 @@ namespace testMap2
         private static readonly string apiKey = "5b3ce3597851110001cf624851bc34eb78cc4304b08f2d04d3ea5700";  // Replace with your API key
         private static readonly string baseUrl = "https://api.openrouteservice.org";
 
+//        private static dynamic jsonContent = new
+//        {
+//            jobs = new object[]
+//{
+//            new { id = 1, service = 0, delivery = new[] { 2 }, location = new[] { 26.02270603179932, 44.94115439843291 }, skills = new[] { 1 } },
+//            new { id = 2, service = 0, delivery = new[] { 1 }, location = new[] { 26.001538038253788, 44.953539235786934 }, skills = new[] { 1 } },
+//            new { id = 3, service = 0, delivery = new[] { 1 }, location = new[] { 26.011649966239933, 44.951739765636106 }, skills = new[] { 2 } },
+//            new { id = 4, service = 0, delivery = new[] { 1 }, location = new[] { 26.008629798889164, 44.940470914531225  }, skills = new[] { 2 } },
+//            new { id = 5, service = 0, delivery = new[] { 1 }, location = new[] { 26.032007932662967, 44.93134942283986 }, skills = new[] { 14 } },
+//            new { id = 6, service = 0, delivery = new[] { 1 }, location = new[] { 26.034196615219116, 44.91737197079612 }, skills = new[] { 14 } }
+//},
+//            vehicles = new[]
+//{
+//            new { id = 1, profile = "driving-car", start = new[] { 26.036540865898136, 44.91442221794393 }, end = new[] { 26.036540865898136, 44.91442221794393 }, capacity = new[] { 6 }, skills = new[] { 1, 14, 2 }, time_window = new[] { 28800, 43200 } },
+//            new { id = 2, profile = "driving-car", start = new[] { 26.036540865898136, 44.91442221794393 }, end = new[] { 26.036540865898136, 44.91442221794393 }, capacity = new[] { 2 }, skills = new[] { 6, 16 }, time_window = new[] { 28800, 43200 } }
+//        },
+//            options = new
+//            {
+//                g = true // This flag tells the API to return the road-following geometry
+//            }
+//        };
+
+        private int nextJobId = 7;
+
         public static async Task<string> GetOptimizationResponse()
         {
+            MonitFlotaEntities db = new MonitFlotaEntities();
+
             using (var httpClient = new HttpClient())
             {
                 // Set the base URL of the API
@@ -235,33 +262,43 @@ namespace testMap2
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
+                // Fetch jobs and vehicles from the database
+                var jobs = db.Jobs.ToList().Select(job => new
+                {
+                    id = job.j_Id,
+                    service = job.j_Service,
+                    delivery = job.j_Delivery.Split(',').Where(s => int.TryParse(s, out _)).Select(int.Parse).ToArray(),
+                    location = job.j_Location.Split(',').Where(s => double.TryParse(s, out _)).Select(double.Parse).ToArray(),
+                    skills = job.j_Skills.Split(',').Where(s => int.TryParse(s, out _)).Select(int.Parse).ToArray()
+                }).ToArray();
+
+                var vehicles = db.Vehicles.ToList().Select(vehicle => new
+                {
+                    id = vehicle.vh_Id,
+                    profile = vehicle.vh_Profile,
+                    start = vehicle.vh_Start.Split(',').Where(s => double.TryParse(s, out _)).Select(double.Parse).ToArray(),
+                    end = vehicle.vh_End.Split(',').Where(s => double.TryParse(s, out _)).Select(double.Parse).ToArray(),
+                    capacity = vehicle.vh_Capacity.Split(',').Where(s => int.TryParse(s, out _)).Select(int.Parse).ToArray(),
+                    skills = vehicle.vh_Skills.Split(',').Where(s => int.TryParse(s, out _)).Select(int.Parse).ToArray(),
+                    time_window = vehicle.vh_TimeWindow.Split(',').Where(s => int.TryParse(s, out _)).Select(int.Parse).ToArray(),
+                }).ToArray();
+
                 // Define the request body (JSON payload)
                 var jsonContent = new
                 {
-                    jobs = new object[]
-    {
-        new { id = 1, service = 0, delivery = new[] { 2 }, location = new[] { 26.02270603179932, 44.94115439843291 }, skills = new[] { 1 } },
-        new { id = 2, service = 0, delivery = new[] { 1 }, location = new[] { 26.001538038253788, 44.953539235786934 }, skills = new[] { 1 } },
-        new { id = 3, service = 0, delivery = new[] { 1 }, location = new[] { 26.011649966239933, 44.951739765636106 }, skills = new[] { 2 } },
-        new { id = 4, service = 0, delivery = new[] { 1 }, location = new[] { 26.008629798889164, 44.940470914531225  }, skills = new[] { 2 } },
-        new { id = 5, service = 0, delivery = new[] { 1 }, location = new[] { 26.032007932662967, 44.93134942283986 }, skills = new[] { 14 } },
-        new { id = 6, service = 0, delivery = new[] { 1 }, location = new[] { 26.034196615219116, 44.91737197079612 }, skills = new[] { 14 } }
-    },
-                    vehicles = new[]
-    {
-        new { id = 1, profile = "driving-car", start = new[] { 26.036540865898136, 44.91442221794393 }, end = new[] { 26.036540865898136, 44.91442221794393 }, capacity = new[] { 6 }, skills = new[] { 1, 14, 2 }, time_window = new[] { 28800, 43200 } },
-        new { id = 2, profile = "driving-car", start = new[] { 26.036540865898136, 44.91442221794393 }, end = new[] { 26.036540865898136, 44.91442221794393 }, capacity = new[] { 2 }, skills = new[] { 6, 16 }, time_window = new[] { 28800, 43200 } }
-    },
+                    jobs = jobs,
+                    vehicles = vehicles,
                     options = new
                     {
                         g = true // This flag tells the API to return the road-following geometry
                     }
                 };
 
-                
+                MessageBox.Show(JsonConvert.SerializeObject(jsonContent));
+
                 // Create StringContent with the JSON payload and proper headers
                 var content = new StringContent(JsonConvert.SerializeObject(jsonContent), Encoding.UTF8, "application/json");
-                
+
                 try
                 {
                     // Make the POST request to the /optimization endpoint
@@ -281,7 +318,9 @@ namespace testMap2
                     MessageBox.Show($"Request error: {e.Message}");
                     return null;  // Return null or throw the exception depending on your needs
                 }
+                MessageBox.Show(JsonConvert.SerializeObject(jsonContent));
             }
+            
         }
 
         public async Task CallApiAndPlotResponse()
@@ -296,6 +335,17 @@ namespace testMap2
         private void gMapControl1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            using (var addJobForm = new Add_delivery())
+            {
+                if (addJobForm.ShowDialog() == DialogResult.OK)
+                {
+                    CallApiAndPlotResponse();
+                }
+            }
         }
     }
 }

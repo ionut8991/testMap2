@@ -29,16 +29,17 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtLatitude = new System.Windows.Forms.TextBox();
+            this.txtLongitude = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtService = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtDelivery = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.txtSkills = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -50,20 +51,20 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Add a new delivery address";
             // 
-            // textBox1
+            // txtLatitude
             // 
-            this.textBox1.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-            this.textBox1.Location = new System.Drawing.Point(36, 76);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.txtLatitude.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+            this.txtLatitude.Location = new System.Drawing.Point(36, 76);
+            this.txtLatitude.Name = "txtLatitude";
+            this.txtLatitude.Size = new System.Drawing.Size(100, 20);
+            this.txtLatitude.TabIndex = 1;
             // 
-            // textBox2
+            // txtLongitude
             // 
-            this.textBox2.Location = new System.Drawing.Point(200, 76);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 2;
+            this.txtLongitude.Location = new System.Drawing.Point(200, 76);
+            this.txtLongitude.Name = "txtLongitude";
+            this.txtLongitude.Size = new System.Drawing.Size(100, 20);
+            this.txtLongitude.TabIndex = 2;
             // 
             // label2
             // 
@@ -83,12 +84,12 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Latitude:";
             // 
-            // textBox3
+            // txtService
             // 
-            this.textBox3.Location = new System.Drawing.Point(36, 124);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(264, 20);
-            this.textBox3.TabIndex = 5;
+            this.txtService.Location = new System.Drawing.Point(36, 124);
+            this.txtService.Name = "txtService";
+            this.txtService.Size = new System.Drawing.Size(264, 20);
+            this.txtService.TabIndex = 5;
             // 
             // label4
             // 
@@ -99,13 +100,13 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Service time (time to unload at location):";
             // 
-            // textBox4
+            // txtDelivery
             // 
-            this.textBox4.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-            this.textBox4.Location = new System.Drawing.Point(36, 173);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(264, 20);
-            this.textBox4.TabIndex = 7;
+            this.txtDelivery.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+            this.txtDelivery.Location = new System.Drawing.Point(36, 173);
+            this.txtDelivery.Name = "txtDelivery";
+            this.txtDelivery.Size = new System.Drawing.Size(264, 20);
+            this.txtDelivery.TabIndex = 7;
             // 
             // label5
             // 
@@ -116,13 +117,13 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Numbers of deliveries at this address:";
             // 
-            // textBox5
+            // txtSkills
             // 
-            this.textBox5.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-            this.textBox5.Location = new System.Drawing.Point(36, 241);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(108, 20);
-            this.textBox5.TabIndex = 9;
+            this.txtSkills.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+            this.txtSkills.Location = new System.Drawing.Point(36, 241);
+            this.txtSkills.Name = "txtSkills";
+            this.txtSkills.Size = new System.Drawing.Size(108, 20);
+            this.txtSkills.TabIndex = 9;
             // 
             // label6
             // 
@@ -133,21 +134,32 @@
             this.label6.TabIndex = 10;
             this.label6.Text = "Skill-uri necesare:";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(36, 390);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "Add Job";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Add_delivery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(350, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.txtSkills);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.txtDelivery);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txtService);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtLongitude);
+            this.Controls.Add(this.txtLatitude);
             this.Controls.Add(this.label1);
             this.Name = "Add_delivery";
             this.Text = "Add_delivery";
@@ -159,15 +171,16 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtLatitude;
+        private System.Windows.Forms.TextBox txtLongitude;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtService;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtDelivery;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox txtSkills;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button1;
     }
 }
