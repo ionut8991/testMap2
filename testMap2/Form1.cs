@@ -104,6 +104,11 @@ namespace testMap2
 
                     // Current step's distance
                     double currentDistance = (double)step["distance"]; // Distance for this step
+                    double durationInSeconds = (double)step["duration"]; // Duration for this step
+
+                    // Calculate duration in hours and minutes
+                    int hours = (int)durationInSeconds / 3600;
+                    int minutes = ((int)durationInSeconds % 3600) / 60;
 
                     // Calculate distance from previous point (if applicable)
                     double distanceFromLastPoint = previousDistance > 0 ? currentDistance - previousDistance : currentDistance;
@@ -123,7 +128,7 @@ namespace testMap2
 
                     // Log each step's details
                     //MessageBox.Show($"Step: Location ({lat}, {lng}) - Distance from last point: {distanceFromLastPoint} meters");
-                    var stepNode = new TreeNode($"Step ID: {step["id"]}, Location: ({lat}, {lng}), Distance: {distanceFromLastPoint} m");
+                    var stepNode = new TreeNode($"Step ID: {step["id"]}, Location: ({lat}, {lng}), Distance: {distanceFromLastPoint} m, EST Duration: {hours} hr {minutes} min");
 
                     // Add step as a child of the vehicle node
                     vehicleNode.Nodes.Add(stepNode);

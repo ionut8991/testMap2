@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1d83171869c04e6fb0da7fd7576c2035" Name="Diagram1">
+      <Diagram DiagramId="fd697ae4d0f843f59a2db80ebe0abea1" Name="Diagram1">
         <EntityTypeShape EntityType="MonitFlotaModel.Job" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MonitFlotaModel.Vehicle" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
