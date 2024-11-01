@@ -39,6 +39,7 @@
                     {
                         // Administrator user, show Form1
                         InitializeMap();
+                        
                     }
                     else if (currentUserType == "vehicle")
                     {
@@ -70,7 +71,7 @@
             }
 
         }
-        private void InitializeMap()
+        private async void InitializeMap()
         {
             gMapControl1.MapProvider = GMapProviders.GoogleMap;
             gMapControl1.Position = new PointLatLng(44.91442221794393, 26.036540865898136);  // Default position
@@ -84,131 +85,118 @@
             markersOverlay = new GMapOverlay("markers");
             gMapControl1.Overlays.Add(markersOverlay);
 
+            await CallApiAndPlotResponse();
 
-
-            CallApiAndPlotResponse();
-
-            locationUpdateTimer.Start();
+            // locationUpdateTimer.Start();
         }
 
 
         public void PlotRouteOnMap(string jsonResponse)
+        {
+            if (vehicleTreeView.InvokeRequired)
             {
-                // Parse the response using Newtonsoft.Json
-                var response = JObject.Parse(jsonResponse);
-
-                // Extract routes from the response
-                var routes = response["routes"];
-
-                if (routes == null || !routes.HasValues)
-                {
-                    MessageBox.Show("No routes found in the response.");
-                    return; // Early exit if no routes
-                }
-
-                vehicleTreeView.Nodes.Clear();
-
-                var vehicleRoutes = new Dictionary<string, TreeNode>();
-
-
-
-                foreach (var route in routes)
-                {
-                    var vehicleId = route["vehicle"]?.ToString() ?? "Unknown"; // Use null-conditional operator
-                    //var summary = response["summary"];
-                    var totalDistance = (double)route["distance"]; // Total distance of the route
-
-                    var vehicleNode = new TreeNode();
-
-                    if (!vehicleRoutes.ContainsKey(vehicleId))
-                    {
-                        vehicleNode = new TreeNode($"Vehicle {vehicleId} (Total Distance: {totalDistance} m)");
-                        vehicleRoutes[vehicleId] = vehicleNode;
-                        vehicleTreeView.Nodes.Add(vehicleNode); // Add vehicle to the tree
-                    }
-
-                   // MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters");
-
-                    var steps = route["steps"];
-                    double previousDistance = 0; // Initialize variable to store the previous step's distance
-
-                    if (steps == null || !steps.HasValues)
-                    {
-                        var noStepsNode = new TreeNode($"No steps found for vehicle {vehicleId}.");
-                        vehicleNode.Nodes.Add(noStepsNode);
-                        continue; // Skip to the next route if no steps are present
-                    }
-
-                    foreach (var step in steps)
-                    {
-                        // Skip steps of type "start"
-                        if (step["type"]?.ToString() == "start" || step["type"]?.ToString() == "end")
-                        {
-                            continue; // Skip this iteration for "start" type steps
-                        }
-
-                        var location = step["location"];
-                        double lat = (double)location[1]; // Latitude
-                        double lng = (double)location[0]; // Longitude
-
-                        // Current step's distance
-                        double currentDistance = (double)step["distance"]; // Distance for this step
-                        double durationInSeconds = (double)step["duration"]; // Duration for this step
-
-                        // Calculate duration in hours and minutes
-                        int hours = (int)durationInSeconds / 3600;
-                        int minutes = ((int)durationInSeconds % 3600) / 60;
-
-                        // Calculate distance from previous point (if applicable)
-                        double distanceFromLastPoint = previousDistance > 0 ? currentDistance - previousDistance : currentDistance;
-
-                        // Add a marker for each valid step
-                        Bitmap markerImage = CreateMarkerImage(step["id"].ToString());
-                        //var marker = new GMarkerGoogle(new PointLatLng(lat, lng), markerImage);
-                        var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
-                        markersOverlay.Markers.Add(marker);
-
-                        // Set tooltip text
-                        marker.ToolTipText = $"ID: {step["id"]} - {distanceFromLastPoint} m";
-                        marker.ToolTip.Fill = Brushes.LightYellow; // Customize tooltip background
-                        marker.ToolTip.Stroke = Pens.Black; // Tooltip border
-                        marker.ToolTip.Foreground = Brushes.Black; // Tooltip text color
-
-
-                        // Log each step's details
-                        //MessageBox.Show($"Step: Location ({lat}, {lng}) - Distance from last point: {distanceFromLastPoint} meters");
-                        var stepNode = new TreeNode($"Step ID: {step["id"]}, Location: ({lat}, {lng}), Distance: {distanceFromLastPoint} m, EST Duration: {hours} hr {minutes} min");
-
-                        // Add step as a child of the vehicle node
-                        vehicleNode.Nodes.Add(stepNode);
-                        // Update previous distance for the next iteration
-                        previousDistance = currentDistance;
-                    }
-
-                    // Decode the polyline geometry
-                    var geometry = route["geometry"]?.ToString();
-                    if (!string.IsNullOrEmpty(geometry))
-                    {
-                        var routePoints = DecodePolyline(geometry);
-                        GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {vehicleId}");
-
-                        // Set the route color based on vehicle ID
-                        gMapRoute.Stroke = vehicleId == "1"
-                            ? new System.Drawing.Pen(System.Drawing.Color.Red, 3)
-                            : new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
-
-                        markersOverlay.Routes.Add(gMapRoute);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"No geometry data found for vehicle {vehicleId}.");
-                    }
-                }
-
-                // Refresh the map to show new markers and routes
-                gMapControl1.Refresh();
-                gMapControl1.ReloadMap();
+                vehicleTreeView.Invoke(new Action<string>(PlotRouteOnMap), jsonResponse);
+                return;
             }
+
+            // Parse the response using Newtonsoft.Json
+            var response = JObject.Parse(jsonResponse);
+
+            // Extract routes from the response
+            var routes = response["routes"];
+
+            if (routes == null || !routes.HasValues)
+            {
+                MessageBox.Show("No routes found in the response.");
+                return; // Early exit if no routes
+            }
+
+            vehicleTreeView.Nodes.Clear();
+
+            var vehicleRoutes = new Dictionary<string, TreeNode>();
+
+            foreach (var route in routes)
+            {
+                var vehicleId = route["vehicle"]?.ToString() ?? "Unknown"; // Use null-conditional operator
+                var totalDistance = (double)route["distance"]; // Total distance of the route
+                var totalTime = (double)route["duration"]; // Total time of the route
+
+                var vehicleNode = new TreeNode();
+
+                if (!vehicleRoutes.ContainsKey(vehicleId))
+                {
+                    vehicleNode = new TreeNode($"Vehicle {vehicleId} (Total Distance: {totalDistance} m, Total EST Time: {(int)totalTime / 3600} hr, {((int)totalTime % 3600) / 60} min)");
+                    vehicleRoutes[vehicleId] = vehicleNode;
+                    vehicleTreeView.Nodes.Add(vehicleNode); // Add vehicle to the tree
+                }
+
+                MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters, Total Time: {totalTime / 3600} hours");
+
+                var steps = route["steps"];
+                double previousDistance = 0; // Initialize variable to store the previous step's distance
+
+                if (steps == null || !steps.HasValues)
+                {
+                    var noStepsNode = new TreeNode($"No steps found for vehicle {vehicleId}.");
+                    vehicleNode.Nodes.Add(noStepsNode);
+                    continue; // Skip to the next route if no steps are present
+                }
+
+                foreach (var step in steps)
+                {
+                    if (step["type"]?.ToString() == "start" || step["type"]?.ToString() == "end")
+                    {
+                        continue; // Skip this iteration for "start" type steps
+                    }
+
+                    var location = step["location"];
+                    double lat = (double)location[1]; // Latitude
+                    double lng = (double)location[0]; // Longitude
+
+                    double currentDistance = (double)step["distance"]; // Distance for this step
+                    double durationInSeconds = (double)step["duration"]; // Duration for this step
+
+                    int hours = (int)durationInSeconds / 3600;
+                    int minutes = ((int)durationInSeconds % 3600) / 60;
+
+                    double distanceFromLastPoint = previousDistance > 0 ? currentDistance - previousDistance : currentDistance;
+
+                    Bitmap markerImage = CreateMarkerImage(step["id"].ToString());
+                    var marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
+                    markersOverlay.Markers.Add(marker);
+
+                    marker.ToolTipText = $"ID: {step["id"]} - {distanceFromLastPoint} m";
+                    marker.ToolTip.Fill = Brushes.LightYellow;
+                    marker.ToolTip.Stroke = Pens.Black;
+                    marker.ToolTip.Foreground = Brushes.Black;
+
+                    var stepNode = new TreeNode($"Step ID: {step["id"]}, Location: ({lat}, {lng}), Distance: {distanceFromLastPoint} m, EST Duration: {hours} hr {minutes} min");
+
+                    vehicleNode.Nodes.Add(stepNode);
+                    previousDistance = currentDistance;
+                }
+
+                var geometry = route["geometry"]?.ToString();
+                if (!string.IsNullOrEmpty(geometry))
+                {
+                    var routePoints = DecodePolyline(geometry);
+                    GMap.NET.WindowsForms.GMapRoute gMapRoute = new GMap.NET.WindowsForms.GMapRoute(routePoints, $"Route for vehicle {vehicleId}");
+
+                    gMapRoute.Stroke = vehicleId == "1"
+                        ? new System.Drawing.Pen(System.Drawing.Color.Red, 3)
+                        : new System.Drawing.Pen(System.Drawing.Color.Blue, 3);
+
+                    markersOverlay.Routes.Add(gMapRoute);
+                }
+                else
+                {
+                    MessageBox.Show($"No geometry data found for vehicle {vehicleId}.");
+                }
+            }
+
+            gMapControl1.Refresh();
+            gMapControl1.ReloadMap();
+        }
 
 
 
