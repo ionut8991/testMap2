@@ -27,5 +27,6 @@ namespace testMap2
     
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Vehicle> Vehicles { get; set; }
+        public virtual DbSet<currentloc> currentlocs { get; set; }
     }
 }

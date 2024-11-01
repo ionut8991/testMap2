@@ -39,8 +39,12 @@
                 markersOverlay = new GMapOverlay("markers");
                 gMapControl1.Overlays.Add(markersOverlay);
 
+
+
                 CallApiAndPlotResponse();
-            }
+
+                locationUpdateTimer.Start();
+        }
 
         
             public void PlotRouteOnMap(string jsonResponse)
@@ -323,7 +327,7 @@
                     catch (HttpRequestException e)
                     {
                         MessageBox.Show($"Request error: {e.Message}");
-                        return null;  // Return null or throw the exception depending on your needs
+                        return null; 
                     }
                     MessageBox.Show(JsonConvert.SerializeObject(jsonContent));
                 }
@@ -332,7 +336,7 @@
 
             public async Task CallApiAndPlotResponse()
             {
-                string jsonResponse = await GetOptimizationResponse(); // Assume this function gets the response from the API
+                string jsonResponse = await GetOptimizationResponse(); 
                 PlotRouteOnMap(jsonResponse);
                 //MessageBox.Show("Optimization response plotted on the map! + " + jsonResponse);
                 System.IO.File.AppendAllText("log.txt", jsonResponse);
@@ -354,5 +358,48 @@
                     }
                 }
             }
+
+        private PointLatLng? GetLatestLocation()
+        {
+            using (MonitFlotaEntities db = new MonitFlotaEntities())
+            {
+                var latestLocation = db.currentlocs
+                    .OrderByDescending(c => c.ctimestamp) 
+                    .Select(c => new { c.coordinates })
+                    .FirstOrDefault();
+
+                if (latestLocation != null)
+                {
+                    var coords = latestLocation.coordinates.Split(',').Select(double.Parse).ToArray();
+                    return new PointLatLng(coords[1], coords[0]); 
+                }
+            }
+            return null;
         }
+
+        private void LocationUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            PointLatLng latestLocation = (PointLatLng)GetLatestLocation();
+
+            if (latestLocation != null)
+            {
+                // Remove previous location marker if it exists
+                var previousLocationMarker = markersOverlay.Markers.FirstOrDefault(m => m.ToolTipText == "Current Position");
+                if (previousLocationMarker != null)
+                {
+                    markersOverlay.Markers.Remove(previousLocationMarker);
+                }
+             
+                var latestMarker = new GMarkerGoogle(latestLocation, GMarkerGoogleType.blue);
+                latestMarker.ToolTipText = "Current Position";
+                latestMarker.ToolTip.Fill = Brushes.LightBlue;
+                latestMarker.ToolTip.Stroke = Pens.Blue;
+                markersOverlay.Markers.Add(latestMarker);
+                
+                gMapControl1.Refresh();
+            }
+        }
+
+
+    }
     }

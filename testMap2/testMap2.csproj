@@ -93,6 +93,9 @@
     <Compile Include="Add_delivery.Designer.cs">
       <DependentUpon>Add_delivery.cs</DependentUpon>
     </Compile>
+    <Compile Include="currentloc.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

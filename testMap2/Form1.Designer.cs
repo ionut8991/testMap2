@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.vehicleTreeView = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.locationUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -76,6 +78,16 @@
             this.panel1.Size = new System.Drawing.Size(1032, 585);
             this.panel1.TabIndex = 1;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(945, 430);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Add Job";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // vehicleTreeView
             // 
             this.vehicleTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -93,15 +105,11 @@
             this.panel2.Size = new System.Drawing.Size(1032, 126);
             this.panel2.TabIndex = 3;
             // 
-            // button1
+            // locationUpdateTimer
             // 
-            this.button1.Location = new System.Drawing.Point(945, 430);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Add Job";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.locationUpdateTimer.Enabled = true;
+            this.locationUpdateTimer.Interval = 1000;
+            this.locationUpdateTimer.Tick += new System.EventHandler(this.LocationUpdateTimer_Tick);
             // 
             // Form1
             // 
@@ -126,6 +134,7 @@
         private System.Windows.Forms.TreeView vehicleTreeView;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Timer locationUpdateTimer;
     }
 }
 

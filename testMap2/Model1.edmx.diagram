@@ -7,6 +7,7 @@
       <Diagram DiagramId="fd697ae4d0f843f59a2db80ebe0abea1" Name="Diagram1">
         <EntityTypeShape EntityType="MonitFlotaModel.Job" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MonitFlotaModel.Vehicle" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MonitFlotaModel.currentloc" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
