@@ -24,6 +24,16 @@
           <Property Name="j_Location" Type="nvarchar" MaxLength="100" />
           <Property Name="j_Skills" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="u_username" Type="varchar" MaxLength="255" />
+          <Property Name="u_password" Type="varchar" MaxLength="255" />
+          <Property Name="u_type" Type="varchar" MaxLength="50" />
+          <Property Name="u_type_id" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Vehicles">
           <Key>
             <PropertyRef Name="vh_Id" />
@@ -39,6 +49,7 @@
         <EntityContainer Name="MonitFlotaModelStoreContainer">
           <EntitySet Name="currentloc" EntityType="Self.currentloc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vehicles" EntityType="Self.Vehicles" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -71,6 +82,7 @@
           <EntitySet Name="Jobs" EntityType="Self.Job" />
           <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
           <EntitySet Name="currentlocs" EntityType="MonitFlotaModel.currentloc" />
+          <EntitySet Name="Users" EntityType="MonitFlotaModel.User" />
         </EntityContainer>
         <EntityType Name="currentloc">
           <Key>
@@ -80,6 +92,16 @@
           <Property Name="vehicle_id" Type="Int32" Nullable="false" />
           <Property Name="coordinates" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ctimestamp" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="u_username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="u_password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="u_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="u_type_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -118,6 +140,17 @@
                 <ScalarProperty Name="coordinates" ColumnName="coordinates" />
                 <ScalarProperty Name="vehicle_id" ColumnName="vehicle_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MonitFlotaModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="u_type_id" ColumnName="u_type_id" />
+                <ScalarProperty Name="u_type" ColumnName="u_type" />
+                <ScalarProperty Name="u_password" ColumnName="u_password" />
+                <ScalarProperty Name="u_username" ColumnName="u_username" />
+                <ScalarProperty Name="u_id" ColumnName="u_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

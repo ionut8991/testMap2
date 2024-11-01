@@ -1,6 +1,6 @@
 ﻿namespace testMap2
 {
-    partial class Form1
+    partial class VehicleForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,15 +29,33 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.vehicleTreeView = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.locationUpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.panel1.SuspendLayout();
+            this.btnLogOut = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // vehicleTreeView
+            // 
+            this.vehicleTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vehicleTreeView.Location = new System.Drawing.Point(0, 0);
+            this.vehicleTreeView.Name = "vehicleTreeView";
+            this.vehicleTreeView.Size = new System.Drawing.Size(800, 126);
+            this.vehicleTreeView.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btnLogOut);
+            this.panel2.Controls.Add(this.vehicleTreeView);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 324);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(800, 126);
+            this.panel2.TabIndex = 5;
             // 
             // gMapControl1
             // 
@@ -62,65 +80,47 @@
             this.gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gMapControl1.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMapControl1.ShowTileGridLines = false;
-            this.gMapControl1.Size = new System.Drawing.Size(1032, 585);
+            this.gMapControl1.Size = new System.Drawing.Size(800, 450);
             this.gMapControl1.TabIndex = 0;
             this.gMapControl1.Zoom = 0D;
-            this.gMapControl1.Load += new System.EventHandler(this.gMapControl1_Load);
             // 
             // panel1
             // 
             this.panel1.AutoSize = true;
-            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.gMapControl1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1032, 585);
-            this.panel1.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(945, 430);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Add Job";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // vehicleTreeView
-            // 
-            this.vehicleTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.vehicleTreeView.Location = new System.Drawing.Point(0, 0);
-            this.vehicleTreeView.Name = "vehicleTreeView";
-            this.vehicleTreeView.Size = new System.Drawing.Size(1032, 126);
-            this.vehicleTreeView.TabIndex = 2;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.vehicleTreeView);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 459);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1032, 126);
-            this.panel2.TabIndex = 3;
+            this.panel1.Size = new System.Drawing.Size(800, 450);
+            this.panel1.TabIndex = 4;
             // 
             // locationUpdateTimer
             // 
+            this.locationUpdateTimer.Enabled = true;
             this.locationUpdateTimer.Interval = 1000;
-            this.locationUpdateTimer.Tick += new System.EventHandler(this.LocationUpdateTimer_Tick);
             // 
-            // Form1
+            // btnLogOut
+            // 
+            this.btnLogOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogOut.Location = new System.Drawing.Point(722, 100);
+            this.btnLogOut.Name = "btnLogOut";
+            this.btnLogOut.Size = new System.Drawing.Size(75, 23);
+            this.btnLogOut.TabIndex = 3;
+            this.btnLogOut.Text = "LogOut";
+            this.btnLogOut.UseVisualStyleBackColor = true;
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
+            // 
+            // VehicleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1032, 585);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.panel1.ResumeLayout(false);
+            this.Name = "VehicleForm";
+            this.Text = "VehicleForm";
             this.panel2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -128,12 +128,11 @@
 
         #endregion
 
-        private GMap.NET.WindowsForms.GMapControl gMapControl1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TreeView vehicleTreeView;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button1;
+        private GMap.NET.WindowsForms.GMapControl gMapControl1;
+        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer locationUpdateTimer;
+        private System.Windows.Forms.Button btnLogOut;
     }
 }
-

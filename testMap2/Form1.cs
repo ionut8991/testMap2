@@ -21,33 +21,78 @@
         public partial class Form1 : Form
         {
             private GMapOverlay markersOverlay;
+            private string currentUserType;
+            private string currentUserTypeId;
 
-            public Form1()
+        public Form1()
+        {
+            InitializeComponent();
+
+            using (var loginForm = new Login())
             {
-                InitializeComponent();
+                if (loginForm.ShowDialog() == DialogResult.OK)
+                {
+                    currentUserType = loginForm.UserType;
+                    currentUserTypeId = loginForm.UserTypeId;
+
+                    if (currentUserType == "administrator")
+                    {
+                        // Administrator user, show Form1
+                        InitializeMap();
+                    }
+                    else if (currentUserType == "vehicle")
+                    {
+                        
+                        this.Hide();
+                        var vehicleForm = new VehicleForm(currentUserTypeId);
+                        vehicleForm.ShowDialog();
+                        this.Close();
+                        // Vehicle user, show vehicle-specific form
+                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unknown user type.");
+                        Close();
+                    }
+                }
+                else
+                {
+                    // Close the application if login is canceled or failed
+                    Close();
+                    return;
+                }
+
 
                 // Initialize map
-                gMapControl1.MapProvider = GMapProviders.GoogleMap;
-                gMapControl1.Position = new PointLatLng(44.91442221794393, 26.036540865898136);  // Default position
-                gMapControl1.MinZoom = 5;
-                gMapControl1.MaxZoom = 100;
-                gMapControl1.Zoom = 12;
-                gMapControl1.Manager.Mode = AccessMode.ServerOnly;
-                gMapControl1.SetPositionByKeywords("Ploiesti, Romania");
+                //InitializeMap();
 
-                // Create a new overlay for markers and routes
-                markersOverlay = new GMapOverlay("markers");
-                gMapControl1.Overlays.Add(markersOverlay);
+            }
+
+        }
+        private void InitializeMap()
+        {
+            gMapControl1.MapProvider = GMapProviders.GoogleMap;
+            gMapControl1.Position = new PointLatLng(44.91442221794393, 26.036540865898136);  // Default position
+            gMapControl1.MinZoom = 5;
+            gMapControl1.MaxZoom = 100;
+            gMapControl1.Zoom = 12;
+            gMapControl1.Manager.Mode = AccessMode.ServerOnly;
+            gMapControl1.SetPositionByKeywords("Ploiesti, Romania");
+
+            // Create a new overlay for markers and routes
+            markersOverlay = new GMapOverlay("markers");
+            gMapControl1.Overlays.Add(markersOverlay);
 
 
 
-                CallApiAndPlotResponse();
+            CallApiAndPlotResponse();
 
-                locationUpdateTimer.Start();
+            locationUpdateTimer.Start();
         }
 
-        
-            public void PlotRouteOnMap(string jsonResponse)
+
+        public void PlotRouteOnMap(string jsonResponse)
             {
                 // Parse the response using Newtonsoft.Json
                 var response = JObject.Parse(jsonResponse);
@@ -348,16 +393,15 @@
 
             }
 
-            private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var addJobForm = new Add_delivery();
+            if (addJobForm.ShowDialog() == DialogResult.OK)
             {
-                using (var addJobForm = new Add_delivery())
-                {
-                    if (addJobForm.ShowDialog() == DialogResult.OK)
-                    {
-                        CallApiAndPlotResponse();
-                    }
-                }
+                CallApiAndPlotResponse();
             }
+            addJobForm.Dispose();
+        }
 
         private PointLatLng? GetLatestLocation()
         {
