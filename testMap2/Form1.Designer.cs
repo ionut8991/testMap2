@@ -35,6 +35,7 @@
             this.vehicleTreeView = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.locationUpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnLogout = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +99,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnLogout);
             this.panel2.Controls.Add(this.vehicleTreeView);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 459);
@@ -107,8 +109,20 @@
             // 
             // locationUpdateTimer
             // 
+            this.locationUpdateTimer.Enabled = true;
             this.locationUpdateTimer.Interval = 1000;
             this.locationUpdateTimer.Tick += new System.EventHandler(this.LocationUpdateTimer_Tick);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogout.Location = new System.Drawing.Point(954, 100);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(75, 23);
+            this.btnLogout.TabIndex = 3;
+            this.btnLogout.Text = "LogOut";
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // Form1
             // 
@@ -134,6 +148,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Timer locationUpdateTimer;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
 

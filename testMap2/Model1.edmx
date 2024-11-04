@@ -13,6 +13,8 @@
           <Property Name="vehicle_id" Type="int" Nullable="false" />
           <Property Name="coordinates" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ctimestamp" Type="datetime" />
+          <Property Name="speed" Type="real" />
+          <Property Name="potholes" Type="int" />
         </EntityType>
         <EntityType Name="Jobs">
           <Key>
@@ -92,6 +94,8 @@
           <Property Name="vehicle_id" Type="Int32" Nullable="false" />
           <Property Name="coordinates" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ctimestamp" Type="DateTime" Precision="3" />
+          <Property Name="speed" Type="Single" />
+          <Property Name="potholes" Type="Int32" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -136,6 +140,8 @@
           <EntitySetMapping Name="currentlocs">
             <EntityTypeMapping TypeName="MonitFlotaModel.currentloc">
               <MappingFragment StoreEntitySet="currentloc">
+                <ScalarProperty Name="potholes" ColumnName="potholes" />
+                <ScalarProperty Name="speed" ColumnName="speed" />
                 <ScalarProperty Name="ctimestamp" ColumnName="ctimestamp" />
                 <ScalarProperty Name="coordinates" ColumnName="coordinates" />
                 <ScalarProperty Name="vehicle_id" ColumnName="vehicle_id" />

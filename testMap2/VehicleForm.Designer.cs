@@ -31,10 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.vehicleTreeView = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnLogOut = new System.Windows.Forms.Button();
             this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.locationUpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.btnLogOut = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -56,6 +56,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(800, 126);
             this.panel2.TabIndex = 5;
+            // 
+            // btnLogOut
+            // 
+            this.btnLogOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogOut.Location = new System.Drawing.Point(722, 100);
+            this.btnLogOut.Name = "btnLogOut";
+            this.btnLogOut.Size = new System.Drawing.Size(75, 23);
+            this.btnLogOut.TabIndex = 3;
+            this.btnLogOut.Text = "LogOut";
+            this.btnLogOut.UseVisualStyleBackColor = true;
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // gMapControl1
             // 
@@ -98,17 +109,7 @@
             // 
             this.locationUpdateTimer.Enabled = true;
             this.locationUpdateTimer.Interval = 1000;
-            // 
-            // btnLogOut
-            // 
-            this.btnLogOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLogOut.Location = new System.Drawing.Point(722, 100);
-            this.btnLogOut.Name = "btnLogOut";
-            this.btnLogOut.Size = new System.Drawing.Size(75, 23);
-            this.btnLogOut.TabIndex = 3;
-            this.btnLogOut.Text = "LogOut";
-            this.btnLogOut.UseVisualStyleBackColor = true;
-            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
+            this.locationUpdateTimer.Tick += new System.EventHandler(this.LocationUpdateTimer_Tick);
             // 
             // VehicleForm
             // 

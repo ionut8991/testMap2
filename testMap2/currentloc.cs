@@ -18,5 +18,7 @@ namespace testMap2
         public int vehicle_id { get; set; }
         public string coordinates { get; set; }
         public Nullable<System.DateTime> ctimestamp { get; set; }
+        public Nullable<float> speed { get; set; }
+        public Nullable<int> potholes { get; set; }
     }
 }

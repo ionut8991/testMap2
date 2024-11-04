@@ -413,25 +413,40 @@
         {
             PointLatLng latestLocation = (PointLatLng)GetLatestLocation();
 
-            if (latestLocation != null)
+            if (latestLocation != null && markersOverlay != null)
             {
                 // Remove previous location marker if it exists
-                var previousLocationMarker = markersOverlay.Markers.FirstOrDefault(m => m.ToolTipText == "Current Position");
+                var previousLocationMarker = markersOverlay.Markers?.FirstOrDefault(m => m.ToolTipText == "Current Position");
                 if (previousLocationMarker != null)
                 {
                     markersOverlay.Markers.Remove(previousLocationMarker);
                 }
-             
+
+                MonitFlotaEntities db = new MonitFlotaEntities();
+
+                var speed = db.currentlocs
+                    .OrderByDescending(c => c.ctimestamp)
+                    .Select(c => new { c.speed })
+                    .FirstOrDefault()?.speed;
+
                 var latestMarker = new GMarkerGoogle(latestLocation, GMarkerGoogleType.blue);
-                latestMarker.ToolTipText = "Current Position";
+                latestMarker.ToolTipText = $"Current Position\n Speed = {speed} km/h";
                 latestMarker.ToolTip.Fill = Brushes.LightBlue;
                 latestMarker.ToolTip.Stroke = Pens.Blue;
                 markersOverlay.Markers.Add(latestMarker);
-                
+
                 gMapControl1.Refresh();
             }
         }
 
-
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            using (var loginForm = new Login())
+            {
+                // Show the Login form again if the user logs out
+                loginForm.ShowDialog();
+            }
+        }
     }
     }
