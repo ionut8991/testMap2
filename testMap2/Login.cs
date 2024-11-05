@@ -45,16 +45,25 @@ namespace testMap2
                         // Login successful
                         MessageBox.Show("Login successful!");
                         UserType = user.u_type;
-                        UserTypeId = user.u_type_id;
-                        DialogResult = DialogResult.OK;
-                        Close();
+                        UserTypeId = user.u_type_id;                       
                     }
                     else
                     {
                         // Login failed
                         MessageBox.Show("Invalid username or password.");
-                        this.DialogResult = DialogResult.Cancel;
                     }
+                }
+                if (UserType == "administrator")
+                {
+                    OpenForm(new Form1(UserType, UserTypeId));
+                }
+                else if (UserType == "vehicle")
+                {
+                    OpenForm(new VehicleForm(UserTypeId));
+                }
+                else
+                {
+                    MessageBox.Show("Unknown user type.");
                 }
             }
             catch (Exception ex)
@@ -63,10 +72,26 @@ namespace testMap2
             }
         }
 
+        private void OpenForm(Form form)
+        {
+            // Close any existing instances of Form1 or VehicleForm
+            foreach (Form openForm in Application.OpenForms)
+            {
+                if (openForm is Form1 || openForm is VehicleForm)
+                {
+                    openForm.Close();
+                }
+            }
+
+            // Hide the login form and show the new form
+            this.Hide();
+            form.ShowDialog();
+            this.Show();
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            Application.Exit();
         }
     }
 }

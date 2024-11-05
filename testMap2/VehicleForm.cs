@@ -303,17 +303,21 @@ namespace testMap2
 
         private void LocationUpdateTimer_Tick(object sender, EventArgs e)
         {
-            PointLatLng latestLocation = (PointLatLng)GetLatestLocation();
-
-            if (latestLocation != null && markersOverlay != null)
+            var latestLocationNullable = GetLatestLocation();
+            if (latestLocationNullable.HasValue)
             {
-                // Remove previous location marker if it exists
-                var previousLocationMarker = markersOverlay.Markers?.FirstOrDefault(m => m.ToolTipText == "Current Position");
-                if (previousLocationMarker != null)
+                PointLatLng latestLocation = latestLocationNullable.Value;
+
+                if (markersOverlay != null)
                 {
-                    markersOverlay.Markers.Remove(previousLocationMarker);
+                    // Remove previous location marker if it exists
+                    var previousLocationMarker = markersOverlay.Markers?.FirstOrDefault(m => m.ToolTipText == "Current Position");
+                    if (previousLocationMarker != null)
+                    {
+                        markersOverlay.Markers.Remove(previousLocationMarker);
+                    }
                 }
-            }
+
                 MonitFlotaEntities db = new MonitFlotaEntities();
 
                 var speed = db.currentlocs
@@ -328,12 +332,12 @@ namespace testMap2
                 markersOverlay.Markers.Add(latestMarker);
 
                 gMapControl1.Refresh();
-            
+            }
         }
 
         private void btnLogOut_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
             using (var loginForm = new Login())
             {
                 // Show the Login form again if the user logs out

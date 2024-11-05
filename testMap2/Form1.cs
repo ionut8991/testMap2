@@ -24,53 +24,26 @@
             private string currentUserType;
             private string currentUserTypeId;
 
-        public Form1()
+        public Form1(string userType, string userTypeId)
         {
             InitializeComponent();
+            currentUserType = userType;
+            currentUserTypeId = userTypeId;
 
-            using (var loginForm = new Login())
+            if (currentUserType == "administrator")
             {
-                if (loginForm.ShowDialog() == DialogResult.OK)
-                {
-                    currentUserType = loginForm.UserType;
-                    currentUserTypeId = loginForm.UserTypeId;
-
-                    if (currentUserType == "administrator")
-                    {
-                        // Administrator user, show Form1
-                        InitializeMap();
-                        
-                    }
-                    else if (currentUserType == "vehicle")
-                    {
-                        
-                        this.Hide();
-                        var vehicleForm = new VehicleForm(currentUserTypeId);
-                        vehicleForm.ShowDialog();
-                        this.Close();
-                        // Vehicle user, show vehicle-specific form
-                        
-                    }
-                    else
-                    {
-                        MessageBox.Show("Unknown user type.");
-                        Close();
-                    }
-                }
-                else
-                {
-                    // Close the application if login is canceled or failed
-                    Close();
-                    return;
-                }
-
-
-                // Initialize map
-                //InitializeMap();
-
+                // Administrator user, show Form1
+                InitializeMap();
+            }
+            else
+            {
+                MessageBox.Show("Unknown user type.");
+                Close();
             }
 
         }
+
+        
         private async void InitializeMap()
         {
             gMapControl1.MapProvider = GMapProviders.GoogleMap;
@@ -441,7 +414,7 @@
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            this.Close();
+            //this.Hide();
             using (var loginForm = new Login())
             {
                 // Show the Login form again if the user logs out
