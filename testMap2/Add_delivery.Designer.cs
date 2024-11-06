@@ -37,7 +37,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtDelivery = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtSkills = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -119,14 +118,6 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Numbers of deliveries at this address:";
             // 
-            // txtSkills
-            // 
-            this.txtSkills.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-            this.txtSkills.Location = new System.Drawing.Point(36, 241);
-            this.txtSkills.Name = "txtSkills";
-            this.txtSkills.Size = new System.Drawing.Size(108, 20);
-            this.txtSkills.TabIndex = 9;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -163,7 +154,7 @@
             "Normal",
             "Refrigerated",
             "Important"});
-            this.comboSkills.Location = new System.Drawing.Point(167, 240);
+            this.comboSkills.Location = new System.Drawing.Point(36, 241);
             this.comboSkills.Name = "comboSkills";
             this.comboSkills.Size = new System.Drawing.Size(121, 21);
             this.comboSkills.TabIndex = 13;
@@ -177,7 +168,6 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.txtSkills);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtDelivery);
             this.Controls.Add(this.label4);
@@ -205,7 +195,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtDelivery;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtSkills;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
