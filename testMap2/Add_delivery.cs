@@ -18,7 +18,7 @@ namespace testMap2
         public double[] Location => new[] { double.Parse(txtLongitude.Text), double.Parse(txtLatitude.Text) };
         public int Service => int.Parse(txtService.Text);
         public int[] Delivery => txtDelivery.Text.Split(',').Select(int.Parse).ToArray();
-        public int[] Skills => txtSkills.Text.Split(',').Select(int.Parse).ToArray();
+        public int[] Skills; // => txtSkills.Text.Split(',').Select(int.Parse).ToArray();
 
         public Add_delivery()
         {
@@ -27,6 +27,13 @@ namespace testMap2
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (comboSkills.SelectedIndex == 0)
+            { Skills = new int[] { 1 }; }
+            else if (comboSkills.SelectedIndex == 1)
+            { Skills = new int[] { 6 }; }
+            else if (comboSkills.SelectedIndex == 2)
+            { Skills = new int[] { 14 }; }
+
             var job = new Job
             {
                 j_Service = Service,

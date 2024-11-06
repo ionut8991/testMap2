@@ -72,6 +72,11 @@
                 return;
             }
 
+            if (string.IsNullOrEmpty(jsonResponse))
+            {
+                MessageBox.Show("The response is empty or null.");
+                return;
+            }
             // Parse the response using Newtonsoft.Json
             var response = JObject.Parse(jsonResponse);
 
@@ -397,13 +402,16 @@
 
                 MonitFlotaEntities db = new MonitFlotaEntities();
 
-                var speed = db.currentlocs
+                var latestData = db.currentlocs
                     .OrderByDescending(c => c.ctimestamp)
-                    .Select(c => new { c.speed })
-                    .FirstOrDefault()?.speed;
+                    .Select(c => new { c.speed, c.vehicle_id })
+                    .FirstOrDefault();
+
+                var speed = latestData?.speed;
+                var vehicleId = latestData?.vehicle_id;
 
                 var latestMarker = new GMarkerGoogle(latestLocation, GMarkerGoogleType.blue);
-                latestMarker.ToolTipText = $"Current Position\n Speed = {speed} km/h";
+                latestMarker.ToolTipText = $"Current Position\nVehicle ID: {vehicleId}\nSpeed: {speed} km/h";
                 latestMarker.ToolTip.Fill = Brushes.LightBlue;
                 latestMarker.ToolTip.Stroke = Pens.Blue;
                 markersOverlay.Markers.Add(latestMarker);

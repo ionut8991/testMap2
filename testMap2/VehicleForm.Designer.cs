@@ -35,6 +35,7 @@
             this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.locationUpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +99,7 @@
             // panel1
             // 
             this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.btnRefresh);
             this.panel1.Controls.Add(this.gMapControl1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -110,6 +112,16 @@
             this.locationUpdateTimer.Enabled = true;
             this.locationUpdateTimer.Interval = 1000;
             this.locationUpdateTimer.Tick += new System.EventHandler(this.LocationUpdateTimer_Tick);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(722, 295);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 1;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // VehicleForm
             // 
@@ -135,5 +147,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer locationUpdateTimer;
         private System.Windows.Forms.Button btnLogOut;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }

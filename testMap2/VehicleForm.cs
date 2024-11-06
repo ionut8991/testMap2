@@ -347,5 +347,12 @@ namespace testMap2
             // Close all open forms except the Login form
             //Application.Exit();
         }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            this.Controls.Clear();
+            this.InitializeComponent();
+            InitializeMap();
+        }
     }
 }
