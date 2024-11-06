@@ -103,7 +103,7 @@
                     vehicleTreeView.Nodes.Add(vehicleNode); // Add vehicle to the tree
                 }
 
-                MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters, Total Time: {totalTime / 3600} hours");
+                //MessageBox.Show($"Vehicle {vehicleId} Total Distance: {totalDistance} meters, Total Time: {totalTime / 3600} hours");
 
                 var steps = route["steps"];
                 double previousDistance = 0; // Initialize variable to store the previous step's distance
